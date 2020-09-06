@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hu.ssm.mapper.EmpMapper">
+
+	<resultMap type="Emp" id="empMap">
+		<id column="eid" property="eid" />
+		<result column="ename" property="ename" />
+		<result column="age" property="age" />
+		<result column="sex" property="sex" />
+		<association property="dept" javaType="Dept">
+			<id column="did" property="did" />
+			<result column="dname" property="dname" />
+		</association>
+	</resultMap>
+
+	<!-- List<Emp> getAllEmp(); -->
+	<select id="getAllEmp" resultMap="empMap">
+		select
+		e.eid,e.ename,e.age,e.sex,d.did,d.dname
+		from emp e
+		left join dept d
+		on
+		e.did=d.did
+	</select>
+
+	<!-- Emp getEmpByEid(String eid); -->
+	<select id="getEmpByEid" resultMap="empMap">
+		select
+		e.eid,e.ename,e.age,e.sex,d.did,d.dname
+		from emp e
+		left join dept d
+		on
+		e.did=d.did
+		where e.eid=#{eid}
+	</select>
+
+	<!-- void updateEmp(Emp emp); -->
+	<update id="updateEmp">
+		update emp set
+		ename=#{ename},
+		age=#{age},
+		sex=#{sex},
+		did=#{dept.did}
+		where eid=#{eid}
+	</update>
+
+	<!-- void deleteEmpByEid(String eid); -->
+	<delete id="deleteEmpByEid">
+		delete from emp where eid=#{eid}
+	</delete>
+
+	<!-- void deleteMoreEmp(String eids); -->
+	<delete id="deleteMoreEmp">
+		delete from emp where eid in
+		<trim prefix="(" suffix=")">
+			${value}
+		</trim>
+	</delete>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>
